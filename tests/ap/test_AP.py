@@ -1,5 +1,5 @@
 import pytest
-from ap import AP, StatementTemplate, ShapeInfo
+from tap2shacl.ap import AP, StatementTemplate, ShapeInfo
 
 namespace_fname = "tests/ap/TestData/namespaces.csv"
 metadata_fname = "tests/ap/TestData/about.csv"

@@ -1,4 +1,4 @@
-from ap import AP, StatementTemplate
+from ..ap import AP, StatementTemplate
 from rdflib import Graph, URIRef, Literal, BNode, Namespace
 from rdflib import SH, RDF, RDFS, XSD, SDO
 from rdflib.collection import Collection

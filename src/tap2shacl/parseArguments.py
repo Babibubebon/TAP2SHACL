@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from ._version import __version__
+from . import __version__
 
 # defaults
 tapFileName = "tap.csv"
@@ -12,7 +12,7 @@ outputFileName = None
 
 def parse_arguments():
     parser = ArgumentParser(
-        prog="tap2shacl.py",
+        prog="tap2shacl",
         description="Reads a Dublin Core Tabular Application Profile, with some extensions, and converts it to SHACL.",
     )
     parser.add_argument("tapFileName", type=str, metavar="<tap csv file>")

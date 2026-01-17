@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-from tap2shacl import (
+from . import (
     TAP2SHACLConverter,
-    TAP2APConverter,
-    AP2SHACLConverter,
     __version__,
 )
-from tap2shacl.parseArguments import parse_arguments
+from .parseArguments import parse_arguments
 
 
 def main():

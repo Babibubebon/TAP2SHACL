@@ -2,7 +2,7 @@ import pytest
 from pprint import PrettyPrinter
 from dctap import csvreader  # , TAPShape, TAPStatementConstraint
 from dctap.config import get_config
-from ap import AP, StatementTemplate
+from tap2shacl.ap import AP, StatementTemplate
 
 tapFileName = "tests/tap2ap/TestData/tap.csv"
 configFileName = "dctap.yml"

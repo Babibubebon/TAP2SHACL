@@ -1,8 +1,8 @@
 import pytest
 from dctap import csvreader  # , TAPShape, TAPStatementConstraint
 from dctap.config import get_config
-from ap import AP, StatementTemplate, ShapeInfo
-from tap2ap import TAP2APConverter
+from tap2shacl.ap import AP, StatementTemplate, ShapeInfo
+from tap2shacl.tap2ap import TAP2APConverter
 
 tapFileName = "tests/tap2ap/TestData/tap.csv"
 configFileName = "dctap.yml"

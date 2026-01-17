@@ -1,5 +1,5 @@
 import pytest
-from ap import AP, StatementTemplate
+from tap2shacl.ap import AP, StatementTemplate
 
 
 @pytest.fixture(scope="module")

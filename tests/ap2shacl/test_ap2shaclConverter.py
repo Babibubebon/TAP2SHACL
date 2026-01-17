@@ -1,5 +1,5 @@
 import pytest
-from ap2shacl import (
+from tap2shacl.ap2shacl import (
     AP2SHACLConverter,
     make_property_shape_name,
     list2RDFList,

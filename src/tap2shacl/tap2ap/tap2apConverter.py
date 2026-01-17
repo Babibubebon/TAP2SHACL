@@ -1,7 +1,7 @@
 from csv import DictReader
 from dctap import csvreader  # , TAPShape, TAPStatementConstraint
 from dctap.config import get_config
-from ap import AP, StatementTemplate
+from ..ap import AP, StatementTemplate
 import re
 
 # defaults may be overridden by metadata file e.g. about.csv

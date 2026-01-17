@@ -1,6 +1,5 @@
-from tap2ap import TAP2APConverter
-from ap2shacl import AP2SHACLConverter
-
+from .tap2ap import TAP2APConverter
+from .ap2shacl import AP2SHACLConverter
 
 class TAP2SHACLConverter:
     """Classs comprising TAP, AP data, with methods to convert from TAP to SHACL via AP"""

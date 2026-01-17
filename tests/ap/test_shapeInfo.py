@@ -1,6 +1,6 @@
 import pytest
-from ap import ShapeInfo, read_shapeInfoDict
-from ap.shapeInfo import ShapeInfo
+from tap2shacl.ap import ShapeInfo, read_shapeInfoDict
+from tap2shacl.ap.shapeInfo import ShapeInfo
 
 
 @pytest.fixture(scope="module")
