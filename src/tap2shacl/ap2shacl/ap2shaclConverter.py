@@ -4,8 +4,9 @@ from rdflib import SH, RDF, RDFS, XSD, SDO
 from rdflib.collection import Collection
 from uuid import uuid4
 from urllib.parse import quote
+from string import Template
 
-# stoopid conflicts with python key words
+# stupid conflicts with python keywords
 SH_in = URIRef("http://www.w3.org/ns/shacl#in")
 SH_or = URIRef("http://www.w3.org/ns/shacl#or")
 SH_class = URIRef("http://www.w3.org/ns/shacl#class")
@@ -15,29 +16,42 @@ default_language = "en"
 default_base = "http://example.org/"
 
 
-def make_property_shape_name(ps):
+def make_property_shape_name(ps: StatementTemplate, config: dict = None)-> str:
     """Return a URI id based on a property statement label & shape."""
-    # TODO: allow user to set preferences for which labels to use.
-    if ps.shapes == []:
-        sh = "_"
-    else:
-        # using first shld be enough to dismbiguate
-        # need to avoid unnecessary #s
-        sh = quote(ps.shapes[0].replace("#", "").replace(" ", "").lower())
-    if ps.labels == {}:
-        name = sh + str(uuid4()).lower()
-        return name
-    else:
-        languages = ps.labels.keys()
-        if "en" in languages:
-            label = ps.labels["en"]
-        elif "en-US" in languages:
-            label = ps.labels["en-US"]
-        else:  # just pull the first one that's found
+    if config and config.get("name_template"):
+        name_template = Template(config.get("name_template"))
+
+        if len(ps.labels) > 0:
             label = list(ps.labels.values())[0]
-        label = label[0].upper() + label[1:]  # lowerCamelCase
-        name = sh + quote(label.replace(" ", ""))
-        return name
+        else:
+            label = str(uuid4()).lower()
+        mapping = {
+            "shapeID": ps.shapes[0] if len(ps.shapes) > 0 else "",
+            "propertyID": ps.properties[0].replace(":", "-"),
+            "propertyLabel": label
+        }
+        return name_template.substitute(mapping)
+    else:
+        if ps.shapes == []:
+            sh = "_"
+        else:
+            # using first should be enough to disambiguate
+            # need to avoid unnecessary #s
+            sh = quote(ps.shapes[0].replace("#", "").replace(" ", "").lower())
+        if ps.labels == {}:
+            name = sh + str(uuid4()).lower()
+            return name
+        else:
+            languages = ps.labels.keys()
+            if "en" in languages:
+                label = ps.labels["en"]
+            elif "en-US" in languages:
+                label = ps.labels["en-US"]
+            else:  # just pull the first one that's found
+                label = list(ps.labels.values())[0]
+            label = label[0].upper() + label[1:]  # lowerCamelCase
+            name = sh + quote(label.replace(" ", ""))
+            return name
 
 
 def str2URIRef(namespaces, s):
@@ -70,7 +84,7 @@ def str2URIRef(namespaces, s):
         # there's no prefix, convert to URI using base & URI safe str
         if (s[0] == "#") and (base[-1] == "#"):
             s = s[1:]
-        return URIRef(base + quote(s))
+        return URIRef(base + s)
 
 
 def convert_nodeKind(node_types):
@@ -138,10 +152,11 @@ def list2RDFList(g, list, node_type, namespaces):
 
 
 class AP2SHACLConverter:
-    def __init__(self, ap):
+    def __init__(self, ap: AP, config: dict = None):
         base = default_base
         self.ap = ap
         self.sg = Graph(base=base)  # shacl graph
+        self.config = config if config else {}
 
     def convert_AP_SHACL(self):
         self.convert_namespaces()
@@ -235,7 +250,7 @@ class AP2SHACLConverter:
                 for p in ps.properties:
                     # TODO this needs revisting, half the elements aren't processed
                     prop = quote(p.replace("#", "").replace(":", "_"))
-                    ps_name = make_property_shape_name(ps) + "_" + prop + "_opt"
+                    ps_name = make_property_shape_name(ps, config=self.config.get("property_shape")) + "_" + prop + "_opt"
                     ps_id = str2URIRef(self.ap.namespaces, ps_name)
                     ps_ids.append(ps_id)
                     ps_opt_uri = str2URIRef(self.ap.namespaces, ps_name)
@@ -254,7 +269,7 @@ class AP2SHACLConverter:
                         (str2URIRef(self.ap.namespaces, sh), SH.property, ps_opt_uri)
                     )
             else:  # Normal case of just one property path
-                ps_name = make_property_shape_name(ps)
+                ps_name = make_property_shape_name(ps, config=self.config.get("property_shape"))
                 severity = self.convert_severity(ps.severity)
                 ps_uri = str2URIRef(self.ap.namespaces, ps_name)
                 for sh in ps.shapes:
@@ -426,6 +441,11 @@ class AP2SHACLConverter:
         elif constraint_type.lower() == "pattern":
             constraint = Literal(valueConstraints[0])
             return {SH.pattern: [constraint]}
+        elif constraint_type.lower() == "languagetag":
+            constraint_list = list2RDFList(
+                self.sg, valueConstraints, "Literal", self.ap.namespaces
+            )
+            return {SH.languageIn: [constraint_list]}
         elif constraint_type.lower() == "minlength":
             constraint = Literal(int((valueConstraints[0])))
             return {SH.minLength: [constraint]}

@@ -11,7 +11,7 @@ defaultLang = "en"
 class AP:
     """Data to define an Application Profile."""
 
-    statementTemplates: list = field(default_factory=list)
+    statementTemplates: list[StatementTemplate] = field(default_factory=list)
     namespaces: dict = field(default_factory=dict)
     metadata: dict = field(default_factory=dict)
     shapeInfo: dict = field(default_factory=dict)

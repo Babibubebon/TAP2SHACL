@@ -8,7 +8,7 @@ class TAP2SHACLConverter:
         self.tap2apConverter = TAP2APConverter(tap_fname, config_fname)
         self.tap = self.tap2apConverter.tap
         self.ap = self.tap2apConverter.ap
-        self.ap2shaclConverter = AP2SHACLConverter(self.ap)
+        self.ap2shaclConverter = AP2SHACLConverter(self.ap, config=self.tap["config_dict"].get("shacl"))
         self.sg = self.ap2shaclConverter.sg
 
     def convertTAP2AP(self, namespace_fname, about_fname, shapes_fname):
