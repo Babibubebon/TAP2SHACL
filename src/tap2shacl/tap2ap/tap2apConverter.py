@@ -109,9 +109,11 @@ class TAP2APConverter:
         """Take string as label and add it to a statementTemplate."""
         # TODO: multiple labels, different languages
         # TODO: general convertString method for propertyDescription, note and labels
-        try:
+        if "lang" in self.ap.metadata.keys():
+            lang = self.ap.metadata["lang"]
+        elif "language" in self.ap.metadata.keys():
             lang = self.ap.metadata["language"]
-        except (KeyError, ValueError):
+        else:
             lang = default_language
         if type(label) == str:
             ps.add_label(lang, label)
