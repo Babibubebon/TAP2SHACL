@@ -1,26 +1,24 @@
+Forked from [philbarker/TAP2SHACL](https://github.com/philbarker/TAP2SHACL)
+
+----
+
 Reads a Dublin Core [Tabular Application Profile](https://github.com/dcmi/dctap), with some extensions, and converts it to [SHACL](https://www.w3.org/TR/shacl/).
 
 WARNING: beta version, use at own risk.
 
 ## Installation and use
 
-Always install in a virtual environment (venv).
-
-`pip install tap2shacl` or install from github. 
-
+```shell
+$ pip install git+https://github.com/Babibubebon/TAP2SHACL.git
+$ tap2shacl
 ```
-(venv) $ git clone https://github.com/philbarker/TAP2SHACL
-(venv) $ cd TAP2SHACL
-(venv) $ pip install -r requirements.txt
-(venv) $ ./tap2shacl.py --help
-```
-**usage:** `tap2shacl.py [-h] [-c «tap config file name»] [-ns «namespace csv file»]
+**usage:** `tap2shacl [-h] [-c «tap config file name»] [-ns «namespace csv file»]
                     [-a «tap metadata csv file»] [-s «shapes csv file»] -v
                     «tap csv file» [<output file>]`
 
-example: `path/to/tap2shacl.py tap.csv shacl.ttl`
+example: `tap2shacl tap.csv shacl.ttl`
 
-```
+```plain
 positional arguments:
   <tap csv file>
   <output file> (optional)
